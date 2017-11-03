@@ -17,8 +17,7 @@ $( document ).ready(function() {
 
   var geomarkId = $.urlParam('geomarkId');
   var map = L.map('map', {
-    minZoom: 1,
-    maxZoom: 18
+    minZoom: 1
   }).setView([49.8, -119.5], 10);
   
 /*-----BASE MAPS-----*/
@@ -27,26 +26,46 @@ $( document ).ready(function() {
     	layers: '0',
         format: 'image/png',
         transparent: true,
-        attribution: "© 2013-2016 GeoBC, DataBC, The Province of British Columbia"
+        attribution: "© 2013-2017 GeoBC, DataBC, The Province of British Columbia"
 	}).addTo(map);
   
   var provWebMercatorCache = new L.tileLayer.wms("http://maps.gov.bc.ca/arcserver/services/Province/web_mercator_cache/MapServer/WMSServer", {
       layers: '0',
         format: 'image/png',
         transparent: true,
-        attribution: "© 2013-2016 GeoBC, DataBC, The Province of British Columbia"
+        attribution: "© 2013-2017 GeoBC, DataBC, The Province of British Columbia"
 	});
+
+  /*
+  var SPOTimagery = new L.tileLayer.wms("http://geo_bc:rzVBvz7a@geocloud.blackbridge.com/service?", {
+      //layers: '0',
+      //format: 'image/png',
+      //transparent: true,
+      attribution: "© 2017 geomatics.planet.com",
+      crs:crs84
+  });
+  */
   
 /*-----OVERLAYS-----*/
 
   var crs84 = new L.Proj.CRS('CRS:84', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
   
-  /*-----OKANAGAN LAKE 2017 IMAGERY-----*/
-  var OKimagery = new L.tileLayer.wms("http://test.openmaps.gov.bc.ca/lzt/ows?", {
+  /*-----OKANAGAN LAKE IMAGERY-----*/
+
+  var OKimagery2013 = new L.tileLayer.wms("http://openmaps.gov.bc.ca/imagex/ecw_wms.dll?", {
+      layers: 'REGIONAL_MOSAICS_BC_OKANAGAN_LAKE_XC200MM_2013_BCALB',
+        format: 'image/png',
+        transparent: true,
+        maxZoom: 21,
+        attribution: "© 2013-2017 GeoBC, DataBC, The Province of British Columbia"
+  });
+
+  var OKimagery2017 = new L.tileLayer.wms("http://test.openmaps.gov.bc.ca/lzt/ows?", {
       layers: 'o17',
         format: 'image/png',
         transparent: true,
-        attribution: "© 2013-2016 GeoBC, DataBC, The Province of British Columbia"
+        maxZoom: 21,
+        attribution: "© 2013-2017 GeoBC, DataBC, The Province of British Columbia"
   }).addTo(map);
 
   /*-----POINTS OF DIVERSION-----*/  
@@ -55,7 +74,7 @@ $( document ).ready(function() {
       layers: 'pub:WHSE_WATER_MANAGEMENT.WLS_POD_LICENCE_SP',
         format: 'image/png',
         transparent: true,
-        attribution: "© 2013-2016 GeoBC, DataBC, The Province of British Columbia",
+        attribution: "© 2013-2017 GeoBC, DataBC, The Province of British Columbia",
       crs:crs84,
       styles: 'Points_of_Diversion'
   }).addTo(map);
@@ -66,12 +85,14 @@ $( document ).ready(function() {
     {
     'Roads Base Map': provRoadsWM,
     'Terrain Base Map': provWebMercatorCache
+    //'SPOT Imagery': SPOTimagery
     },
     {
-    'Okanagan Lake 2017 Imagery (Scale Dependent)': OKimagery
+    'Okanagan Lake 2013 Imagery': OKimagery2013,
+    'Okanagan Lake 2017 Imagery': OKimagery2017
     },
     {
-    collapsed: true  
+    collapsed: false  
     }
   ).addTo(map);
  
@@ -84,34 +105,5 @@ $( document ).ready(function() {
     }
   ).addTo(map);
   
-  /*-----MT. POLLEY MINE MARKER-----*/
-  /*
-  var MtPolleyMarker = L.marker([52.513437,-121.596309],
-	{
-	title: 'Mt. Polley Mine'
-	}
-  ).addTo(map);
-  MtPolleyMarker.bindPopup("Mt. Polley Mine").openPopup();
-  */
-
-  /*-----ZOOM-AWARE GEOJSONs-----*/
-  /*
-  var simpCounter = 0;
-  
-  map.on('zoomend', function(e) {
-    if (map.getZoom() >= 10) {
-      if (simpCounter == 0 || simpCounter == 2) {
-      getFWAStreamJson("QUES_2O_NET10M.geojson");
-      getEMSJson("EMS_Monitoring_Locations_QUES.geojson");
-      simpCounter = 1;
-      }
-    } else if (map.getZoom() <= 9) {
-        if (simpCounter == 0 || simpCounter == 1) {
-        getFWAStreamJson("FWA_BC_200M.geojson");
-        simpCounter = 2;
-      }
-    }
-  });
-  */
 });
 
