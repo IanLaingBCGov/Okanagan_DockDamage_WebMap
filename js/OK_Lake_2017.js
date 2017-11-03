@@ -1,5 +1,5 @@
 ﻿/* -----------------------------------------------------------------------------------
-   Okanagan Lake Dock Damage
+   Okanagan Lake - 2017
    Developed by GeoBC
    (c) 2017 GeoBC | http://www.geobc.gov.bc.ca  
 ----------------------------------------------------------------------------------- */
@@ -18,7 +18,7 @@ $( document ).ready(function() {
   var geomarkId = $.urlParam('geomarkId');
   var map = L.map('map', {
     minZoom: 1
-  }).setView([49.8, -119.5], 10);
+  }).setView([49.6, -119.5], 9);
   
 /*-----BASE MAPS-----*/
 
